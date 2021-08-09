@@ -12,15 +12,7 @@ header('Content-Type: application/json');
 
 
 function proxy() {
-    [$command, $search] = parse_command($_POST["command"]);
-    switch ($command) {
-        case 'gif':
-            search($search);
-            break;
-        default:
-            http_response_code(404);
-            break;
-    }
+    search($_POST["command"]);
 }
 
 function parse_command($command) {
