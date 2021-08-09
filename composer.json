@@ -1,0 +1,13 @@
+{
+    "name": "gabriel/matterbot",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gabriel L. Maljkovich",
+            "email": "gabriel.l.maljkovich@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
