@@ -35,7 +35,7 @@ function search($query) {
     $response = array(
         'response_type' => 'in_channel',
         'text' => '![gif](' . $gif . ')',
-        'url' => $url
+        'username' => 'giphy'
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
 }
