@@ -28,9 +28,8 @@ function search($query) {
     $gif = select_gif($results);
     $response = array(
         'response_type' => 'in_channel',
-        'text' => '![gif](' . $gif . ')',
-        'url' => $url,
-        'query' => $query
+        'text' => $query . '\n' . '![gif](' . $gif . ')',
+        'url' => $url
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
 }
