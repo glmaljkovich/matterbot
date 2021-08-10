@@ -15,7 +15,7 @@ function proxy() {
     $command = urldecode($_POST["command"]);
     switch ($command) {
         case '/gif':
-            $search = urldecode($_POST["text"]);
+            $search = htmlspecialchars($_POST["text"]);
             search($search);
             break;
         default:
