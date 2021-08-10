@@ -40,7 +40,8 @@ function search($query) {
 }
 
 function select_gif($response) {
-    return $response["data"][0]["images"]["original"]["url"];
+    $random_result_index = random_int(0, 10);
+    return $response["data"][$random_result_index]["images"]["original"]["url"];
 }
 
 
