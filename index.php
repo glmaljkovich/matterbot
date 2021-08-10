@@ -12,7 +12,7 @@ header('Content-Type: application/json');
 
 
 function proxy() {
-    search($_POST["command"]);
+    search(urldecode($_POST["command"]));
 }
 
 function parse_command($command) {
@@ -29,7 +29,8 @@ function search($query) {
     $response = array(
         'response_type' => 'in_channel',
         'text' => '![gif](' . $gif . ')',
-        'url' => $url
+        'url' => $url,
+        'query' => $query
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
 }
