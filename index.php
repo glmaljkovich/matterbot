@@ -25,7 +25,8 @@ function proxy() {
 }
 
 function search($query) {
-    $url = GIPHY_API_URL . "/gifs/search?api_key=" . GIPHY_API_KEY
+    $api_key = select_api_key();
+    $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
                          . "&q=" . $query
                          . "&limit=10&offset=0&rating=g"
                          . "&lang=" . GIPHY_LANG;
@@ -37,6 +38,15 @@ function search($query) {
         'url' => $url
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
+}
+
+function select_api_key() {
+    $keys = explode(",", GIPHY_API_KEY);
+    if (count($keys) < 2) {
+        return GIPHY_API_KEY;
+    } else {
+        return $keys[random_int(0, count($keys) - 1)];
+    }
 }
 
 function select_gif($response) {
