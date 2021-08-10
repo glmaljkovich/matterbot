@@ -12,11 +12,16 @@ header('Content-Type: application/json');
 
 
 function proxy() {
-    search(urldecode($_POST["command"]));
-}
-
-function parse_command($command) {
-    return explode(" ", urldecode($command));
+    $command = urldecode($_POST["command"]);
+    switch ($command) {
+        case '/gif':
+            $search = urldecode($_POST["text"]);
+            search($search);
+            break;
+        default:
+            http_response_code(404);
+            break;
+    }
 }
 
 function search($query) {
@@ -28,7 +33,7 @@ function search($query) {
     $gif = select_gif($results);
     $response = array(
         'response_type' => 'in_channel',
-        'text' => $query . '\n' . '![gif](' . $gif . ')',
+        'text' => '![gif](' . $gif . ')',
         'url' => $url
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
