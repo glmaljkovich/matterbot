@@ -43,7 +43,7 @@ function choose($query, $response_url) {
         'attachments' => []
     );
     $attachment = array(
-        'text' => 'Choose a gif ' . $response_url,
+        'text' => 'Choose a gif ' . $response_url . ' ' . BASE_URL . '/choose.php',
         'fields' => [],
         'actions' => []
     );
