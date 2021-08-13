@@ -16,7 +16,7 @@ function proxy() {
     $command = urldecode($_POST["command"]);
     switch ($command) {
         case '/gif':
-            $search = urlencode($_POST["text"]);
+            $search = $_POST["text"];
             if (str_contains($search, "--search")) {
                 search($search, $_POST['response_url']);
             } else if (str_contains($search, "--option")) {
@@ -35,7 +35,7 @@ function search($query, $response_url) {
     $api_key = select_api_key();
     $cleaned_query = str_replace('--search', '', $query);
     $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
-                         . "&q=" . $cleaned_query
+                         . "&q=" . urlencode($cleaned_query)
                          . "&limit=10&offset=0&rating=g"
                          . "&lang=" . GIPHY_LANG;
     $results = get($url);
@@ -47,7 +47,7 @@ function search($query, $response_url) {
     $attachment = array(
         'text' => "### Choose a gif\n" . "This message is only visible to you.\n"
                                        . "To select a gif send another message with the option you want, like this:\n"
-                                       . "`/gif " . urldecode($cleaned_query) . " --option 2`",
+                                       . "`/gif " . $cleaned_query . " --option 2`",
         'fields' => []
     );
     $i = 0;
@@ -73,7 +73,7 @@ function choose($query) {
     [$cleaned_query, $number] = $parts;
     $api_key = select_api_key();
     $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
-                         . "&q=" . $cleaned_query
+                         . "&q=" . urlencode($cleaned_query)
                          . "&limit=10&offset=0&rating=g"
                          . "&lang=" . GIPHY_LANG;
     $results = get($url);
