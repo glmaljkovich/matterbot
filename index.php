@@ -17,10 +17,12 @@ function proxy() {
     switch ($command) {
         case '/gif':
             $search = urlencode($_POST["text"]);
-            if (str_contains($search, "--new")) {
-                choose($search, $_POST['response_url']);
+            if (str_contains($search, "--search")) {
+                search($search, $_POST['response_url']);
+            } else if (str_contains($search, "--option")) {
+                choose($search);
             } else {
-                search($search);
+                random_search($search);
             }
             break;
         default:
@@ -29,24 +31,22 @@ function proxy() {
     }
 }
 
-function choose($query, $response_url) {
+function search($query, $response_url) {
     $api_key = select_api_key();
-    $cleaned_query = str_replace('--new', '', $query);
+    $cleaned_query = str_replace('--search', '', $query);
     $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
                          . "&q=" . $cleaned_query
                          . "&limit=10&offset=0&rating=g"
                          . "&lang=" . GIPHY_LANG;
     $results = get($url);
     $response = array(
-        'response_type' => 'in_channel',
-        'channel_id' => $_POST["user_id"],
+        'response_type' => 'ephemeral',
         'username' => 'giphy',
         'attachments' => []
     );
     $attachment = array(
-        'text' => 'Choose a gif ' . $response_url . ' ' . BASE_URL . '/choose' . ' ' . $_POST["channel_id"],
-        'fields' => [],
-        'actions' => []
+        'text' => '### Choose a gif ',
+        'fields' => []
     );
     $i = 0;
     foreach ($results["data"] as $result) {
@@ -58,22 +58,6 @@ function choose($query, $response_url) {
             'value' => '![gif](' . $gif . ')'
         );
         array_push($attachment['fields'], $field);
-        // Add Action
-        $action = array(
-            'id' => strval($i),
-            'name' => strval($i),
-            'integration' => array(
-                'url' => BASE_URL . '/choose',
-                'context' => array(
-                    'gif' => $gif,
-                    'query' => $cleaned_query,
-                    'response_url' => $response_url,
-                    'channel_id' => $_POST["channel_id"]
-                )
-            )
-        );
-        array_push($attachment['actions'], $action);
-
         $i++;
     }
 
@@ -82,7 +66,26 @@ function choose($query, $response_url) {
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
 }
 
-function search($query) {
+function choose($query) {
+    $parts = explode('--option ', $query);
+    [$cleaned_query, $number] = $parts;
+    $api_key = select_api_key();
+    $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
+                         . "&q=" . $cleaned_query
+                         . "&limit=10&offset=0&rating=g"
+                         . "&lang=" . GIPHY_LANG;
+    $results = get($url);
+    $gif = $results["data"][$number]["images"]["original"]["url"];
+    $response = array(
+        'response_type' => 'in_channel',
+        'text' => '![gif](' . $gif . ')',
+        'username' => 'giphy'
+    );
+    echo json_encode($response, JSON_UNESCAPED_SLASHES);
+}
+
+
+function random_search($query) {
     $api_key = select_api_key();
     $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
                          . "&q=" . $query
