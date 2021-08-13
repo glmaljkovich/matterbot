@@ -62,7 +62,7 @@ function choose($query, $response_url) {
             'id' => strval($i),
             'name' => strval($i),
             'integration' => array(
-                'url' => BASE_URL . '/choose.php',
+                'url' => BASE_URL . '/choose',
                 'context' => array(
                     'gif' => $gif,
                     'query' => $cleaned_query,
