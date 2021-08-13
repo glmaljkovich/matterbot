@@ -4,6 +4,7 @@ define("GIPHY_API_KEY", $_ENV["GIPHY_API_KEY"]);
 define("GIPHY_API_URL", $_ENV["GIPHY_API_URL"]);
 define("GIPHY_LANG", $_ENV["GIPHY_LANG"]);
 define("MATTERMOST_API_KEY", $_ENV["MATTERMOST_API_KEY"]);
+define("BASE_URL", $_ENV["BASE_URL"]);
 
 // The proxy will not accept GET, PUT or DELETE requests
 header("Access-Control-Allow-Methods: POST, OPTIONS");
@@ -16,12 +17,67 @@ function proxy() {
     switch ($command) {
         case '/gif':
             $search = urlencode($_POST["text"]);
-            search($search);
+            if (str_contains($search, "--new")) {
+                choose($search, $_POST['response_url']);
+            } else {
+                search($search);
+            }
             break;
         default:
             http_response_code(404);
             break;
     }
+}
+
+function choose($query, $response_url) {
+    $api_key = select_api_key();
+    $cleaned_query = str_replace('--new', '', $query);
+    $url = GIPHY_API_URL . "/gifs/search?api_key=" .  $api_key
+                         . "&q=" . $cleaned_query
+                         . "&limit=10&offset=0&rating=g"
+                         . "&lang=" . GIPHY_LANG;
+    $results = get($url);
+    $response = array(
+        'response_type' => 'ephemeral',
+        'username' => 'giphy',
+        'attachments' => []
+    );
+    $attachment = array(
+        'text' => 'Choose a gif',
+        'fields' => [],
+        'actions' => []
+    );
+    $i = 0;
+    foreach ($results["data"] as $result) {
+        $gif = $result["images"]["original"]["url"];
+        // Add Field
+        $field = array(
+            'short' => true,
+            'title' => strval($i),
+            'value' => '![gif](' . $gif . ')'
+        );
+        array_push($attachment['fields'], $field);
+        // Add Action
+        $action = array(
+            'id' => strval($i),
+            'name' => strval($i),
+            'integration' => array(
+                'url' => BASE_URL . '/choose.php',
+                'context' => array(
+                    'gif' => $gif,
+                    'query' => $cleaned_query,
+                    'response_url' => $response_url
+                )
+            )
+        );
+        array_push($attachment['actions'], $action);
+
+        $i++;
+    }
+
+    array_push($response['attachments'], $attachment);
+
+    echo json_encode($response, JSON_UNESCAPED_SLASHES);
 }
 
 function search($query) {
