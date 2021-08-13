@@ -17,8 +17,9 @@ function reply($request) {
     $success_msg = array(
         'update' => array(
             'message' => 'Gif sent!'
-        )
-        );
+        ),
+        'ephemeral_text' => 'Gif sent!'
+    );
     echo json_encode($success_msg, JSON_UNESCAPED_SLASHES);
 }
 
