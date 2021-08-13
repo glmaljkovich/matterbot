@@ -45,7 +45,9 @@ function search($query, $response_url) {
         'attachments' => []
     );
     $attachment = array(
-        'text' => '### Choose a gif ',
+        'text' => '### Choose a gif\n' . 'This message is only visible to you.\n'
+                                       . 'To select a gif send another message with the option you want, like this:\n'
+                                       . '`/gif good morning --option 2`',
         'fields' => []
     );
     $i = 0;
@@ -75,7 +77,7 @@ function choose($query) {
                          . "&limit=10&offset=0&rating=g"
                          . "&lang=" . GIPHY_LANG;
     $results = get($url);
-    $gif = $results["data"][$number]["images"]["original"]["url"];
+    $gif = $results["data"][intval($number)]["images"]["original"]["url"];
     $response = array(
         'response_type' => 'in_channel',
         'text' => '![gif](' . $gif . ')',
