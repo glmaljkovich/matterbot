@@ -6,8 +6,10 @@ header('Content-Type: application/json');
 function reply($request) {
     $gif = $request['context']['gif'];
     $response_url = $request['context']['response_url'];
+    $channel_id = $request['context']['channel_id'];
     $response = array(
         'response_type' => 'in_channel',
+        'channel_id' => $channel_id,
         'text' => '![gif](' . $gif . ')',
         'username' => 'giphy'
     );

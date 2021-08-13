@@ -38,7 +38,8 @@ function choose($query, $response_url) {
                          . "&lang=" . GIPHY_LANG;
     $results = get($url);
     $response = array(
-        'response_type' => 'ephemeral',
+        'response_type' => 'in_channel',
+        'channel_id' => $_POST["user_id"],
         'username' => 'giphy',
         'attachments' => []
     );
@@ -66,7 +67,8 @@ function choose($query, $response_url) {
                 'context' => array(
                     'gif' => $gif,
                     'query' => $cleaned_query,
-                    'response_url' => $response_url
+                    'response_url' => $response_url,
+                    'channel_id' => $_POST["channel_id"]
                 )
             )
         );
