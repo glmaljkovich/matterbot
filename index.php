@@ -45,7 +45,7 @@ function search($query, $response_url) {
         'attachments' => []
     );
     $attachment = array(
-        'text' => '### Choose a gif\n' . "This message is only visible to you.\n"
+        'text' => "### Choose a gif\n" . "This message is only visible to you.\n"
                                        . "To select a gif send another message with the option you want, like this:\n"
                                        . "`/gif " . urldecode($cleaned_query) . " --option 2`",
         'fields' => []
@@ -80,7 +80,7 @@ function choose($query) {
     $gif = $results["data"][intval($number)]["images"]["original"]["url"];
     $response = array(
         'response_type' => 'in_channel',
-        'text' => '![gif](' . $gif . ')',
+        'text' => $number . ' ' . '![gif](' . $gif . ')',
         'username' => 'giphy'
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
