@@ -44,7 +44,7 @@ function choose($query, $response_url) {
         'attachments' => []
     );
     $attachment = array(
-        'text' => 'Choose a gif ' . $response_url . ' ' . BASE_URL . '/choose',
+        'text' => 'Choose a gif ' . $response_url . ' ' . BASE_URL . '/choose' . ' ' . $_POST["user_id"],
         'fields' => [],
         'actions' => []
     );
