@@ -80,7 +80,7 @@ function choose($query) {
     $gif = $results["data"][intval($number)]["images"]["original"]["url"];
     $response = array(
         'response_type' => 'in_channel',
-        'text' => $number . ' ' . '![gif](' . $gif . ')',
+        'text' => "`/gif " . $cleaned_query . "`\n" . "![gif](" . $gif . ")",
         'username' => 'giphy'
     );
     echo json_encode($response, JSON_UNESCAPED_SLASHES);
