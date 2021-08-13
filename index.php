@@ -47,7 +47,7 @@ function search($query, $response_url) {
     $attachment = array(
         'text' => '### Choose a gif\n' . 'This message is only visible to you.\n'
                                        . 'To select a gif send another message with the option you want, like this:\n'
-                                       . '`/gif good morning --option 2`',
+                                       . '`/gif ' . $cleaned_query . ' --option 2`',
         'fields' => []
     );
     $i = 0;
