@@ -138,7 +138,7 @@ function get($url) {
     return json_decode(file_get_contents($url), true);
 }
 
-if ($_REQUEST['method'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     proxy();
 } else {
     header('Content-Type: text/html');
