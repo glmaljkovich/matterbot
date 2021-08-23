@@ -141,6 +141,7 @@ function get($url) {
 if ($_REQUEST['method'] === 'POST') {
     proxy();
 } else {
+    header('Content-Type: text/html');
     echo "<h2>Giphy Matterbot</h2>";
 }
 
