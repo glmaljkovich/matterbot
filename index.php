@@ -7,7 +7,7 @@ define("MATTERMOST_API_KEY", $_ENV["MATTERMOST_API_KEY"]);
 define("BASE_URL", $_ENV["BASE_URL"]);
 
 // The proxy will not accept GET, PUT or DELETE requests
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 // The proxy will always return JSON responses
 header('Content-Type: application/json');
 
@@ -138,6 +138,10 @@ function get($url) {
     return json_decode(file_get_contents($url), true);
 }
 
-proxy();
+if ($_REQUEST['method'] === 'POST') {
+    proxy();
+} else {
+    echo "<h2>Giphy Matterbot</h2>";
+}
 
 ?>
